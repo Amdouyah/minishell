@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 20:04:54 by ckannane          #+#    #+#             */
-/*   Updated: 2023/06/22 17:44:07 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:52:31 by amdouyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "Libft/libft.h"
+// #include "Libft/libft.h"
 
 typedef struct s_pip
 {

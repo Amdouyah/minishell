@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   runc.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/23 14:38:47 by ckannane          #+#    #+#             */
+/*   Updated: 2023/06/23 14:38:52 by ckannane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int ft_strcmp(char *s1,char *s2)
@@ -121,18 +133,18 @@ int	words_count(char *str)
 }
 void	read_com(t_pip *com,char **env)
 {
-	int i = 0;
+	//int i = 0;
 	com->commad = first_arg(com);
 	com->env = env[2];
 	//while(env[i])
 	//	printf("%s\n",env[i++]);
-	printf("commadn = %s$\n",com->commad);
+	//printf("commadn = %s$\n",com->commad);
 	//i = 0;
 	if (words_count(com->word) > 1)
 	{
 		com->arg = find_arg(com);
-		while(com->arg[i])
-			printf("arg = %s$\n",com->arg[i++]);
+		//while(com->arg[i])
+		//	printf("arg = %s$\n",com->arg[i++]);
 	}
 }
 
