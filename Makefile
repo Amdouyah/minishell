@@ -27,9 +27,8 @@ $(NAME) : $(OBJ)
 		$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
 
 clean:
-	rm -rf $(OBJ)
+	rm -rf $(NAME)
 
 fclean: clean
-	rm -rf $(NAME)
 
 re: fclean all
