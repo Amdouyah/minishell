@@ -10,11 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc -lreadline
+CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = run.c Libft/libft.a tools.c ft_echo.c ft_pwd.c ft_cd.c
+
+SRC = pars/run.c pars/ft_split.c
 
 OBJ = $(SRC:.C=.O)
 
@@ -23,7 +24,7 @@ NAME = minishell
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-		$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+		$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -lreadline
 
 clean:
 	rm -rf $(OBJ)
