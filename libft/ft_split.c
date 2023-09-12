@@ -3,94 +3,124 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/19 15:08:41 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/19 18:08:31 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/09 18:38:53 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/19 17:55:18 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	word_num(char const *s, char c)
+static size_t	pre_strlen(char const *s, char c, size_t i)
 {
-	int	i;
-	int	n;
+	size_t	j;
+
+	j = 0;
+	if (s[i] == 0)
+		i--;
+	while (s[i] && s[i] != c)
+	{
+		i--;
+		j++;
+	}
+	return (j);
+}
+
+static size_t	start(size_t p, char const *s, char c, size_t l)
+{
+	size_t	i;
+	size_t	x;
 
 	i = 0;
-	n = 0;
+	x = 0;
+	if (s[0] != c && p == 1)
+		return (0);
 	while (s[i])
 	{
 		while (s[i] == c)
 			i++;
-		if (s[i])
-		{
-			while (s[i] && s[i] != c)
-			{
-				i++;
-			}
-			n++;
-		}
+		if ((s[i] != c && s[i + 1] == c) || (s[i] != c && s[i + 1] == '\0'))
+			x++;
+		if (x == p)
+			break ;
+	i++;
 	}
-	return (n);
+	return (i - l + 1);
 }
 
-static int	word_len(char const *s, char c, int i)
+static size_t	lstr(size_t p, char const *s, char c)
 {
-	int	a;
+	size_t	i;
+	size_t	x;
 
-	a = 0;
-	while (s[i] && s[i] != c)
+	i = 0;
+	x = 0;
+	if (p == 1 && s[0] != c)
 	{
-		i++;
-		a++;
+		while (s[i] != c && s[i])
+			i++;
+		return (i);
 	}
-	return (a);
-}
-
-static char	**alloc(char **p, const char *s, int i, char c)
-{
-	int	j;
-	int	k;
-
-	j = 0;
+	while (s[i] == c)
+		i++;
 	while (s[i])
 	{
-		k = 0;
-		while (s[i] && s[i] == c)
-			i++;
-		if (s[i])
+		if (s[i] == c && s[i - 1] != c)
+			x++;
+		if (x == p)
 		{
-			p[j] = malloc(sizeof(char) * (word_len(s, c, i) + 1));
-			if (!p[j])
-				return (NULL);
-			while (s[i] && s[i] != c)
-				p[j][k++] = s[i++];
-			p[j++][k] = '\0';
+			i--;
+			break ;
 		}
+		i++;
 	}
-	p[j] = NULL;
-	return (p);
+	return (pre_strlen (s, c, i));
+}
+
+static size_t	nstr(char const *s, char c)
+{
+	size_t	j;
+	size_t	i;
+	int		hit;
+
+	j = 0;
+	i = 0;
+	hit = 0;
+	while (s[i])
+	{
+		if (s[i] != c && hit == 0)
+		{
+			hit = 1;
+			j++;
+		}
+		else if (s[i] == c)
+			hit = 0;
+		i++;
+	}
+	return (j);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**p;
-	int		i;
+	char	**tab;
+	size_t	i;
+	size_t	sl;
+	size_t	go;
+	size_t	n;
 
-	p = malloc(sizeof(char *) * (word_num(s, c) + 1));
-	if (!p)
-		return (NULL);
+	n = nstr (s, c);
+	tab = (char **)malloc(sizeof(char *) * (n + 1));
+	if (!tab)
+		return (0);
 	i = 0;
-	alloc(p, s, i, c);
-	return (p);
+	while (i < n)
+	{
+		sl = lstr ((i + 1), s, c);
+		go = start (i + 1, s, c, sl);
+		tab[i] = ft_substr(s, go++, sl);
+		i++;
+	}
+	tab[i] = NULL;
+	return (tab);
 }
-/*#include <stdio.h>
-int main ()
-{
-	char *s = " hello world 42 ";
-	char c = ' ';
-	char **res = ft_split(s, c);
-	for(int i = 0; i < 3; i++)
-		printf("%s\n", res[i]);
-}*/

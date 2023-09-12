@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/11 11:43:45 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/17 17:44:41 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/08 19:49:55 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/28 21:37:50 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,22 @@
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	int		i;
-	char	*p;
-	int		len;
+	size_t	len;
+	size_t	i;
+	char	*str;
 
-	len = ft_strlen(s);
-	p = (char *)malloc(sizeof(char) * (len + 1));
-	if (!p)
-		return (NULL);
 	i = 0;
+	if (!s || !f)
+		return (0);
+	len = ft_strlen(s);
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (0);
 	while (i < len)
 	{
-		p[i] = f(i, s[i]);
+		str[i] = f(i, s[i]);
 		i++;
 	}
-	p[i] = '\0';
-	return (p);
+	str[i] = '\0';
+	return (str);
 }
-/*char	myfun(unsigned int i, char s)
-{
-	i = 0;
-	return(s - 32);
-}
-int main()
-{
-	char s[] = "amine";
-
-	printf("%s", ft_strmapi(s, myfun));
-	return 0;
-}*/

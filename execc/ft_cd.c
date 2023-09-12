@@ -6,40 +6,68 @@
 /*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:30:39 by ckannane          #+#    #+#             */
-/*   Updated: 2023/06/23 14:43:49 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/09/12 10:23:27 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include "../minishell.h"
 
-#define MAX_COMMAND_LENGTH 1024
+int ft_cd(t_com *com,t_zid *zone)
+{
+	char cwd[1024];
+	t_val *current;
+	t_zid	*old_path;
+	current = malloc(sizeof(t_val));
+	*current = *zone->env;
+	old_path = malloc(sizeof(t_zid));
+	*old_path = *zone;
+	int found = 0;
 
-void execute_cd(char *directory) {
-    if (chdir(directory) != 0) {
-        perror("chdir() error");
+	while(ft_strcmp(zone->env->name,"PWD") != 0)
+		zone->env = zone->env -> next;
+	while(ft_strcmp(zone->exp->name,"PWD") != 0)
+		zone->exp = zone->exp -> next;
+
+	while(ft_strcmp(old_path->env->name,"OLDPWD") != 0)
+		old_path->env = old_path->env -> next;
+	while(ft_strcmp(old_path->exp->name,"OLDPWD") != 0)
+		old_path->exp = old_path->exp -> next;
+
+	if(com->arg[0] == NULL)
+	{
+		while(ft_strcmp(current->name,"HOME") != 0)
+		{
+			if (ft_strcmp(current->name,"HOME") == 0)
+				found = 1;
+			current = current -> next;
+		}
+		if(found == 0)
+		{
+			perror("cd");
+        	return -1;
+		}
+		if (chdir(current->value) == -1) {
+        perror("cd");
+        return -1;
     }
-}
 
-void execute_command(char *command) {
-    // Separate the command into tokens
-    char *token;
-    token = strtok(command, " ");
-
-    // Handle the "cd" command
-    if (strcmp(token, "cd") == 0) {
-        token = strtok(NULL, " ");
-        if (token != NULL) {
-            execute_cd(token);
-        } else {
-            fprintf(stderr, "cd: missing directory\n");
-        }
-    } else {
-        // Execute other commands using system()
-        system(command);
+	}
+    else if (chdir(com->arg[0])== -1){
+        perror("cd");
+        return -1;
     }
+
+	if (getcwd(cwd, sizeof(cwd)) != NULL) {
+	free(old_path->env->value);
+	old_path->env->value = ft_strdup(zone->env->value);
+	free(zone->env->value);
+	zone->env->value = ft_strdup(cwd);
+	free(old_path->exp->value);
+	old_path->exp->value = ft_strdup(zone->exp->value);
+	free(zone->exp->value);
+	zone->exp->value = ft_strdup(cwd);
+  } else {
+    perror("getcwd");
+  }
+    return 0;
 }

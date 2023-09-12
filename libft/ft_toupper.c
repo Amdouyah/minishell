@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/29 22:28:39 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/09/30 01:08:53 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/01 15:55:39 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/05 13:18:36 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int	ft_toupper(int c)
 {
 	if (c >= 97 && c <= 122)
-		c -= 32;
+		c = c - 32;
 	return (c);
 }

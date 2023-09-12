@@ -6,13 +6,29 @@
 /*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/21 09:26:50 by ckannane          #+#    #+#             */
-/*   Updated: 2023/06/23 14:38:35 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/09/12 15:08:41 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void ft_echo(t_pip *p)
+int	check_echo_flag(char	*str)
+{
+	int i = 0;
+	if(str[i] != '-' && str[i+1] != 'n')
+		return 0;
+	i++;
+	while(str[i])
+	{
+		if(str[i] != 'n')
+			return 0;
+		i++;
+	}
+	return 1;
+}
+
+
+void ft_echo(t_com *p)
 {
 	int i = 0;
 	int j = 0;
@@ -23,7 +39,7 @@ void ft_echo(t_pip *p)
 		return ;
 	if (p->arg == NULL)
 		return ;
-	if (ft_strcmp(p->arg[i],"-n" ) == 0)
+	if (check_echo_flag(p->arg[0])== 1)
 	{
 		fl = 1;
 		i++;
@@ -38,15 +54,14 @@ void ft_echo(t_pip *p)
 		}
 		while (p->arg[i][j])
 		{
+			//if(p->arg[i][j] == '\"' || p->arg[i][j] == '\'')
+			//	j++;
+			//else if(p->arg[i][j])
 			x = 1;
-			if(p->arg[i][j] == '\"' || p->arg[i][j] == '\'')
-				j++;
-			else
-				write(1,&p->arg[i][j++],1);
+			write(1,&p->arg[i][j++],1);
 		}
 		i++;
 	}
-	if(fl == 1)
-		write(1,"$",1);
-	//write(1,"\n",1);
+	if(fl == 0)
+		write(1,"\n",1);
 }

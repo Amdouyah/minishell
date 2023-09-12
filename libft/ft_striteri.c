@@ -3,36 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/12 17:48:33 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/18 15:29:04 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/08 17:41:57 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/16 13:23:54 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 {
 	int	i;
+	int	j;
 
 	i = 0;
-	while (s[i])
+	j = 0;
+	if (!s || !f)
+		return ;
+	i = ft_strlen(s);
+	while (j < i)
 	{
-		(*f)(i, &s[i]);
-		i++;
+		f(j, &s[j]);
+		j++;
 	}
 }
-/*void	myfun(unsigned int i, char *str)
-{
-	*str -= 32;
-	str++;
-}
-int main()
-{
-	char s[] = "amine";
-	ft_striteri(s, myfun);
-	printf("%s", s);
-
-	return 0;
-}*/

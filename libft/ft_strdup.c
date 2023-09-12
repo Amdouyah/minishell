@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/08 17:49:22 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/08 18:13:07 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/03 12:45:44 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/27 17:48:37 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,19 @@
 char	*ft_strdup(const char *s1)
 {
 	char	*s2;
-	int		len;
+	int		s1len;
 	int		i;
 
-	len = ft_strlen(s1);
-	s2 = (char *)malloc(sizeof(char) * (len + 1));
-	if (!s2)
-		return (NULL);
 	i = 0;
+	s1len = ft_strlen(s1);
+	s2 = (char *)malloc((s1len + 1) * sizeof(char));
+	if (!s2)
+		return (0);
 	while (s1[i])
 	{
 		s2[i] = s1[i];
 		i++;
 	}
-		s2[i] = 0;
+	s2[i] = '\0';
 	return (s2);
 }
-/*int main()
-{
-	char s[] = "amine";
-	printf("%s", ft_strdup(s));
-	return 0;
-}*/

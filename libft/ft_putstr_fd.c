@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/10 17:57:12 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/11 10:08:43 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/08 15:38:16 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/16 19:25:30 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,14 @@ void	ft_putstr_fd(char *s, int fd)
 	int	i;
 
 	i = 0;
-	while (s[i])
-	{
-		write(fd, &s[i], 1);
-		i++;
-	}
+	while (s && s[i] != '\0')
+		ft_putchar_fd (s[i++], fd);
 }
+//#include<stdio.h>
+//int main()
+//{
+//	int fd;
+//	ft_putstr_fd("hello world",fd);
+//	fd = open("text.txt", O_RDWR| O_CREAT);
+//	close (fd);
+//}

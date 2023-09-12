@@ -3,57 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 12:39:54 by amdouyah          #+#    #+#             */
-/*   Updated: 2022/10/18 15:28:40 by amdouyah         ###   ########.fr       */
+/*   Created: 2022/10/08 21:59:06 by ckannane          #+#    #+#             */
+/*   Updated: 2022/10/19 16:11:22 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	funcnum(long int n)
+static int	len(long nb)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	if (n <= 0)
+	len = 0;
+	if (nb == 0)
+		return (1);
+	if (nb < 0)
 	{
-			i++;
-			n *= -1;
+		nb = nb * -1;
+		len++;
+	}
+	while (nb > 0)
+	{
+		nb = nb / 10;
+		len++;
+	}
+	return (len);
+}
+
+static char	*result(int i, long n, char *str)
+{
+	if (n == 0)
+	{
+		str[i] = '0';
+		return (str);
+	}
+	if (n < 0)
+	{
+		str[0] = '-';
+		n = n * -1;
 	}
 	while (n > 0)
 	{
+		str[i--] = 48 + (n % 10);
 		n = n / 10;
-		i++;
 	}
-	return (i);
+	return (str);
 }
 
 char	*ft_itoa(int nb)
 {
-	int			len;
-	char		*p;
-	long int	n;
+	char	*str;
+	long	n;
+	int		i;
 
 	n = nb;
-	len = funcnum(n);
-	p = malloc(sizeof(char) * (len + 1));
-	if (!p)
+	i = len(n);
+	str = (char *)malloc(sizeof(char) * (i + 1));
+	if (!str)
 		return (NULL);
-	p[len] = '\0';
-	if (n == 0)
-		p[0] = '0';
-	else if (n < 0)
-	{
-		p[0] = '-';
-		n *= -1;
-	}
-	while (n > 0)
-	{
-		len--;
-		p[len] = (n % 10) + '0';
-		n /= 10;
-	}
-	return (p);
+	str[i--] = '\0';
+	return (result(i, n, str));
 }
