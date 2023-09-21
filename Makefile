@@ -3,27 +3,36 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+         #
+#    By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/14 21:18:58 by ckannane          #+#    #+#              #
-#    Updated: 2023/09/12 16:34:30 by ckannane         ###   ########.fr        #
+#    Updated: 2023/09/21 13:13:31 by amdouyah         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
-SRC = pars/run.c pars/tools.c execc/ft_echo.c execc/ft_pwd.c execc/ft_cd.c execc/ft_export.c execc/ft_ls.c execc/env.c execc/unset.c execc/rederection.c
+
+SRC =	pars/run.c pars/tools.c pars/tool_par.c \
+		pars/tool2.c pars/tool3.c pars/tool4.c pars/parsing_com.c pars/expd.c\
+		execc/ft_echo.c \
+		execc/ft_pwd.c execc/ft_cd.c execc/ft_export.c \
+		execc/env.c execc/unset.c execc/red_tool.c \
+		execc/rederection.c  execc/execve.c\
+		execc/execution.c pars/handl_quote.c pars/set_com.c free.c
 
 OBJ = $(SRC:.c=.o)
 
 NAME = minishell
 
+LDFLAGS = "-L/Users/amdouyah/.brew/opt/readline/lib"
+
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-		$(CC) -L/goinfre/ckannane/homebrew/opt/readline/lib $(CFLAGS) $(OBJ) Libft/libft.a -lreadline -o $(NAME)
+		$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) Libft/libft.a -lreadline -o $(NAME)
 
 clean:
 	rm -rf $(OBJ)
