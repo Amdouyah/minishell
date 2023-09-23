@@ -6,7 +6,7 @@
 /*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 00:22:21 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/20 12:39:37 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/09/21 23:47:16 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@ int	ft_isspace(char c)
 	return (c == ' ' || c == '\n' || c == '\t');
 }
 
-void	fill_them(t_slp_p	*val, char *word, char *input, char **words)
+void	fill_them(t_slp_p *val, char *word, char *input, char **words)
 {
+	char	**new_words;
+
 	if (val->i > val->word_start)
 	{
 		word = (char *)malloc(val->i - val->word_start + 1);
@@ -28,8 +30,10 @@ void	fill_them(t_slp_p	*val, char *word, char *input, char **words)
 		if (val->word_count == val->initial_capacity)
 		{
 			val->initial_capacity *= 2;
-			words = (char **)realloc(words, val->initial_capacity * \
-			sizeof(char *));
+			new_words = (char **)malloc(val->initial_capacity * sizeof(char *));
+			ft_memcpy(new_words, words, val->word_count * sizeof(char *));
+			free(words);
+			words = new_words;
 		}
 	}
 	val->word_start = val->i + 1;

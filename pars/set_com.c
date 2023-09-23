@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_com.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 12:42:39 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/21 13:44:37 by amdouyah         ###   ########.fr       */
+/*   Updated: 2023/09/23 10:46:30 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ char	*fill_the_red(int len, int i, int j, char *input)
 	while (i < len)
 	{
 		c_tmp = input[i];
-		
-		if (issymbol(c_tmp) && (input[i + 1] != ' ' && input[i - 1] != ' '))
+		if (issymbol(c_tmp))
 		{
 			result[j++] = ' ';
 			result[j++] = c_tmp;
@@ -58,16 +57,14 @@ char	*redirection_split(char *input)
 	return (result);
 }
 
-int	set_arg_size(t_com *com)
+int	set_arg_size(t_com *com, int n)
 {
 	int	i;
 	int	num_args;
 
 	i = 0;
 	num_args = 0;
-	if ((ft_strcmp(com->slp[0], "<<") == 0) || \
-	(ft_strcmp(com->slp[0], "<") == 0))
-		i = i + 2;
+	i = n;
 	while (com->slp[i])
 	{
 		if ((ft_strcmp(com->slp[i], ">") == 0 || \
@@ -80,7 +77,7 @@ int	set_arg_size(t_com *com)
 	return (num_args);
 }
 
-void	install_arg(t_com *com, int num_args)
+void	install_arg(t_com *com, int num_args, int n)
 {
 	int	i;
 	int	j;
@@ -91,7 +88,7 @@ void	install_arg(t_com *com, int num_args)
 	com->arg = (char **)malloc((num_args + 1) * sizeof(char *));
 	if (!com->arg)
 		com->arg = NULL;
-	i = 1;
+	i = 1 + n;
 	j = 0;
 	while (j < num_args - 1)
 		com->arg[j++] = ft_strdup(com->slp[i++]);
@@ -99,7 +96,7 @@ void	install_arg(t_com *com, int num_args)
 	j = 0;
 	while (j < num_args)
 	{
-		com->after_red[j] = ft_strdup(com->slp[j]);
+		com->after_red[j] = ft_strdup(com->slp[j + n]);
 		j++;
 	}
 	com->after_red[j] = NULL;

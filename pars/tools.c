@@ -1,172 +1,118 @@
-///* ************************************************************************** */
-///*                                                                            */
-///*                                                        :::      ::::::::   */
-///*   tools.c                                            :+:      :+:    :+:   */
-///*                                                    +:+ +:+         +:+     */
-///*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
-///*                                                +#+#+#+#+#+   +#+           */
-///*   Created: 2023/06/20 14:47:43 by ckannane          #+#    #+#             */
-///*   Updated: 2023/09/09 22:13:32 by ckannane         ###   ########.fr       */
-///*                                                                            */
-///* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/20 14:47:43 by ckannane          #+#    #+#             */
+/*   Updated: 2023/09/20 00:34:11 by ckannane         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//#include "../minishell.h"
+#include "../minishell.h"
 
-//int is_whitespace(char c) {
-//    return (c == ' ' || c == '\t' || c == '\n');
-//}
+void	ft_comadd_back(t_com **com, t_com *new)
+{
+	t_com	*end;
 
-//int count_words(char *str) {
-//    int count = 0;
-//    int i = 0;
-//    int in_word = 0;
-//    int in_quotes = 0;
+	if (com == NULL || new == NULL)
+		return ;
+	if (*com == NULL)
+	{
+		*com = new;
+		return ;
+	}
+	end = ft_comlast(*com);
+	end->next = new;
+	new->next = NULL;
+}
 
-//    while (str[i]) {
-//        if (is_whitespace(str[i])) {
-//            if (in_word && !in_quotes) {
-//                count++;
-//                in_word = 0;
-//            }
-//        } else {
-//            if (!in_word) {
-//                in_word = 1;
-//            }
-//        }
+char	*ft_strjoin_env(char *s1, char *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*str;
 
-//        if (str[i] == '"' || str[i] == '\'') {
-//            if (!in_quotes)
-//                in_quotes = 1;
-//            else
-//                in_quotes = 0;
-//        }
+	i = 0;
+	j = 0;
+	if (s1 == NULL)
+		return ((char *)s2);
+	if (s2 == NULL)
+		return ((char *)s1);
+	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 2));
+	if (!str)
+		return (0);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	str[i++] = '/';
+	while (s2[j])
+		str[i++] = s2[j++];
+	str[i] = '\0';
+	free(s1);
+	return (str);
+}
 
-//        i++;
-//    }
+char	**get_path(char *command, t_val *env)
+{
+	int		i;
+	char	*str;
+	char	**slp;
 
-//    if (in_word && !in_quotes) {
-//        count++;
-//    }
+	i = 0;
+	while (env)
+	{
+		if (ft_strcmp(env->name, "PATH") == 0)
+			str = ft_strdup(env->value);
+		env = env->next;
+	}
+	slp = ft_split(str, ':');
+	free(str);
+	while (slp[i])
+	{
+		slp[i] = ft_strjoin_env(slp[i], command);
+		i++;
+	}
+	return (slp);
+}
 
-//    return count;
-//}
+char	**pas_env(t_val *env)
+{
+	char	**inenv;
+	t_val	*current;
+	int		len_list;
+	int		i;
 
-//char **split_arg(char *str) {
-//    int word_count = count_words(str);
+	current = env;
+	len_list = 0;
+	while (current)
+	{
+		len_list++;
+		current = current->next;
+	}
+	inenv = (char **)malloc(sizeof(char *) * (len_list + 1));
+	if (!inenv)
+		return (NULL);
+	current = env;
+	i = 0;
+	while (current)
+	{
+		inenv[i] = ft_strdup(current->content);
+		current = current->next;
+		i++;
+	}
+	inenv[i] = NULL;
+	return (inenv);
+}
 
-//    if(word_count == 0)
-//     return NULL;
-//    // Allocate memory for the array of strings
-//    char **result = (char **)malloc((word_count + 1) * sizeof(char *));
-//    if (result == NULL) {
-//        return NULL;
-//    }
-
-//    int i = 0;
-//    int j = 0;
-//    int in_word = 0;
-//    int word_length = 0;
-//    int in_quotes = 0;
-
-//    while (str[i]) {
-//        if (is_whitespace(str[i])) {
-//            if (in_word && !in_quotes) {
-//                // Allocate memory for the word
-//                result[j] = (char *)malloc((word_length + 1) * sizeof(char));
-//                if (result[j] == NULL) {
-//                    // Free memory in case of allocation failure
-//                    for (int k = 0; k < j; k++)
-//                        free(result[k]);
-//                    free(result);
-//                    return NULL;
-//                }
-
-//                // Copy the word into the array
-//                strncpy(result[j], &str[i - word_length], word_length);
-//                result[j][word_length] = '\0';
-
-//                j++;
-//                in_word = 0;
-//                word_length = 0;
-//            }
-//        } else {
-//            if (!in_word && !in_quotes) {
-//                in_word = 1;
-//            }
-//            word_length++;
-//        }
-
-//        if (str[i] == '"' || str[i] == '\'') {
-//            if (!in_quotes)
-//                in_quotes = 1;
-//            else
-//                in_quotes = 0;
-//        }
-
-//        i++;
-//    }
-
-//    if (in_word && !in_quotes) {
-//        // Allocate memory for the last word
-//        result[j] = (char *)malloc((word_length + 1) * sizeof(char));
-//        if (result[j] == NULL) {
-//            // Free memory in case of allocation failure
-//            for (int k = 0; k < j; k++)
-//                free(result[k]);
-//            free(result);
-//            return NULL;
-//        }
-
-//        // Copy the last word into the array
-//        strncpy(result[j], &str[i - word_length], word_length);
-//        result[j][word_length] = '\0';
-
-//        j++;
-//    }
-
-//    // Set the last element of the array to NULL
-//    result[j] = NULL;
-
-//    return result;
-//}
-
-//char* ft_strcpy(char* dest, const char* src) {
-//    int srcLen = 0;
-//    int destLen = 0;
-//    char* destPtr;
-//    char* destPos;
-//    const char* srcPos;
-
-//    while (src[srcLen] != '\0') {
-//        srcLen++;
-//    }
-
-//    destPtr = (char*)malloc((srcLen + 1) * sizeof(char)); // Allocate memory for destination string
-
-//    if (destPtr == NULL) {
-//        // Memory allocation failed
-//        return NULL;
-//    }
-
-//    destPos = destPtr;
-//    srcPos = src;
-
-//    while (*srcPos != '\0') {
-//        *destPos = *srcPos;
-//        destPos++;
-//        srcPos++;
-//    }
-
-//    *destPos = '\0'; // Null-terminate the destination string
-
-//    while (*destPtr != '\0') {
-//        *dest = *destPtr;
-//        dest++;
-//        destPtr++;
-//        destLen++;
-//    }
-
-//    *dest = '\0'; // Null-terminate the final destination string
-//    free(destPtr); // Free the dynamically allocated memory for the destination string
-//    return dest - destLen;
-//}
+t_com	*ft_comlast(t_com *com)
+{
+	if (com == NULL)
+		return (NULL);
+	while (com->next != NULL)
+		com = com->next;
+	return (com);
+}

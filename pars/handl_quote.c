@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handl_quote.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 12:49:43 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/20 00:30:43 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/09/23 12:33:47 by amdouyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,31 @@ char	*set_command(char **slp)
 	}
 	str = ft_strdup(slp[0]);
 	return (ft_strdup(return_without_quote(str)));
+}
+
+void	exe_builtins(t_com *com, t_zid *zone)
+{
+	t_val	*current;
+
+	current = zone->env;
+	if (ft_strcmp(com->commad, "cd") == 0)
+		ft_cd(com, zone);
+	else if (ft_strcmp(com->commad, "pwd") == 0)
+		ft_pwd(zone);
+	else if (ft_strcmp(com->commad, "echo") == 0)
+		ft_echo(com, zone);
+	else if (ft_strcmp(com->commad, "export") == 0)
+		ft_export(com, zone);
+	else if (ft_strcmp(com->commad, "unset") == 0)
+		ft_unset(com, zone);
+	else if (ft_strcmp(com->commad, "exit") == 0)
+		ft_exit(com, zone);
+	else if (ft_strcmp(com->commad, "env") == 0)
+	{
+		while (current)
+		{
+			printf("%s=%s\n", current->name, current->value);
+			current = current->next;
+		}
+	}
 }

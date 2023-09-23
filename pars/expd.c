@@ -6,13 +6,13 @@
 /*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 17:20:10 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/21 13:45:02 by amdouyah         ###   ########.fr       */
+/*   Updated: 2023/09/23 12:33:44 by amdouyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*apply_exp(t_com *com, char *str, int i, t_zid *zone)
+char	*apply_exp(t_exn *sh, char *str, int i, t_zid *zone)
 {
 	int		size;
 	char	*tmp1;
@@ -21,18 +21,18 @@ char	*apply_exp(t_com *com, char *str, int i, t_zid *zone)
 
 	size = i;
 	i++;
-	com->var_len = 0;
+	sh->var_len = 0;
 	tmp1 = ft_substr(str, 0, size);
-	com->var_len = count_var_size(str + i);
-	routine(str, i, com, zone);
-	tmp2 = ft_strdup(str + (i + com->var_len));
-	new = ft_strjoin(ft_strjoin(tmp1, com->var), tmp2);
+	sh->var_len = count_var_size(str + i);
+	routine(str, i, sh, zone);
+	tmp2 = ft_strdup(str + (i + sh->var_len));
+	new = ft_strjoin(ft_strjoin(tmp1, sh->var), tmp2);
 	free(str);
 	free(tmp2);
 	return (new);
 }
 
-char	*expd(t_com *com, char *str, t_zid  __unused	*zone)
+char	*expd(t_exn *sh, char *str, t_zid	*zone)
 {
 	int		i;
 	int		is_double;
@@ -40,10 +40,9 @@ char	*expd(t_com *com, char *str, t_zid  __unused	*zone)
 
 	is_double = 0;
 	is_single = 0;
-	com->var = NULL;
+	sh->var = NULL;
 	i = 0;
-	// printf("(%s)", str);
-	while (str && ft_strlen(str) > 0 && str[i])
+	while (str[i])
 	{
 		if (str[i] == '\'' && !(is_double))
 			is_single = !(is_single);
@@ -51,37 +50,33 @@ char	*expd(t_com *com, char *str, t_zid  __unused	*zone)
 			is_double = !(is_double);
 		if (str[i] == '$' && str[i + 1] != '\0' && !(is_single))
 		{
-			str = apply_exp(com, str, i, zone);
+			str = apply_exp(sh, str, i, zone);
 			i = 0;
 		}
 		i++;
 	}
-	if (com->var)
-		free(com->var);
+	free(sh->var);
 	return (str);
 }
 
-char	*expansion(t_com *com, t_zid *zone)
+char	*expansion(char *line, t_zid *zone)
 {
-	int		i;
 	char	*res;
 	char	*hold;
 	char	*command;
+	t_exn	*sh;
 
+	sh = malloc(sizeof(t_exn));
 	res = NULL;
 	command = NULL;
 	hold = ft_strdup("");
 	if (command)
 		command = ft_strdup("");
-	i = 0;
-	while (com->sp[i])
-	{
-		command = expd(com, com->sp[i], zone);
-		res = ft_strjoin(command, " ");
-		hold = ft_strjoin(hold, res);
-		free(res);
-		i++;
-	}
+	command = expd(sh, line, zone);
+	res = ft_strjoin(command, " ");
+	hold = ft_strjoin(hold, res);
+	free(res);
+	free(sh);
 	return (hold);
 }
 

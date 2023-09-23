@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:23:07 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/21 13:33:28 by amdouyah         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:11:29 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,12 @@ void	free_double(char **target)
 	int	i;
 
 	i = 0;
-	if (target)
+	while (target[i] != NULL)
 	{
-		while (target[i] != NULL)
-		{
-			free(target[i]);
-			i++;
-		}
-		free(target);
+		free(target[i]);
+		i++;
 	}
+	free(target);
 }
 
 void	free_t_val_list(t_val *head)
@@ -64,7 +61,6 @@ void	free_t_com_list(t_com *head)
 			free_double(temp->arg);
 		if (temp->slp != NULL)
 			free_double(temp->slp);
-		free(temp->sp);
 		free(temp->word);
 		if (temp->commad != NULL)
 			free(temp->commad);

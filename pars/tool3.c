@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tool3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 20:56:25 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/21 13:23:10 by amdouyah         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:10:24 by ckannane         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,22 @@ int	count_var_size(char *str)
 	return (i);
 }
 
-char	*var_expand(t_com *sh, t_val *env)
+char	*var_expand(t_exn *sh, t_val *env)
 {
 	int		len;
 	int		i;
 	char	*res;
 
+	sh->sp = 0;
 	len = ft_strlen(sh->var);
 	i = 0;
 	while (env)
 	{
 		if (ft_strcmp(sh->var, env->name) == 0)
+		{
+			sh->sp++;
 			break ;
+		}
 		else
 			env = env->next;
 	}
@@ -45,21 +49,21 @@ char	*var_expand(t_com *sh, t_val *env)
 	return (res);
 }
 
-void	routine(char *str, int i, t_com *com, t_zid *zone)
+void	routine(char *str, int i, t_exn *sh, t_zid *zone)
 {
 	t_val	*current;
 
 	current = zone->env;
 	if (str[i] == '?')
 	{
-		com->var_len = 1;
-		com->var = ft_itoa(zone->exito);
+		sh->var_len = 1;
+		sh->var = ft_itoa(zone->exito);
 		zone->exito = 0;
 	}
 	else
 	{
-		com->var = ft_substr(str, i, com->var_len);
-		com->var = var_expand(com, current);
+		sh->var = ft_substr(str, i, sh->var_len);
+		sh->var = var_expand(sh, current);
 	}
 }
 

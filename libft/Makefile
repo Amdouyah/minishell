@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+         #
+#    By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/04 18:48:43 by ckannane          #+#    #+#              #
-#    Updated: 2023/08/30 15:51:25 by ckannane         ###   ########.fr        #
+#    Updated: 2023/09/23 12:53:21 by amdouyah         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,9 +43,9 @@ $(NAME):	$(OBJ)
 			ar rcs $(NAME) $(OBJ)
 
 clean:
-			$(RM) $(OBJ)
+			@$(RM) $(OBJ)
 
 fclean: 	clean
-			$(RM) $(NAME)
+			@$(RM) $(NAME)
 
 re: 		fclean $(NAME)

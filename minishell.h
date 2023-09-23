@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckannane <ckannane@student.42.fr>          +#+  +:+       +#+        */
+/*   By: amdouyah <amdouyah@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 22:07:17 by ckannane          #+#    #+#             */
-/*   Updated: 2023/09/20 12:06:57 by ckannane         ###   ########.fr       */
+/*   Updated: 2023/09/23 12:34:14 by amdouyah         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_com
 	int				dq;
 	int				var_len;
 	char			*var;
-	char			**sp;
 	char			**after_red;
 	char			**arg;
 	char			**slp;
@@ -64,10 +63,17 @@ typedef struct s_slp_p
 	int	i;
 }t_slp_p;
 
+typedef struct s_exn
+{
+	char	*var;
+	int		var_len;
+	int		sp;
+}t_exn;
+
 void	rl_replace_line(const char *text, int clear_undo);
 char	**split_arg(char *str);
 int		ft_strcmp(char *s1, char *s2);
-void	ft_echo(t_com *p);
+void	ft_echo(t_com *p, t_zid *zone);
 int		ft_strcmp(char *s1, char *s2);
 void	ft_pwd(t_zid *zone);
 void	ft_export(t_com *com, t_zid *zone);
@@ -89,13 +95,13 @@ char	**pas_env(t_val *env);
 char	**get_path(char *command, t_val *env);
 char	*ft_strjoin_env(char *s1, char *s2);
 void	ft_comadd_back(t_com **com, t_com *new);
-char	*expansion(t_com *com, t_zid *zone);
+char	*expansion(char *line, t_zid *zone);
 int		check_quote(char *line);
 int		ft_strcmp(char *s1, char *s2);
 t_com	*ft_comnew(char *line);
-char	*expd(t_com *com, char *str, t_zid	*zone);
-void	routine(char *str, int i, t_com *com, t_zid *zone);
-char	*var_expand(t_com *sh, t_val *env);
+char	*expd(t_exn *sh, char *str, t_zid	*zone);
+void	routine(char *str, int i, t_exn *sh, t_zid *zone);
+char	*var_expand(t_exn *sh, t_val *env);
 int		count_var_size(char *str);
 int		check_q(char *str);
 char	**split_with_quotes(char *str, char c, int slp_num, int slp_go);
@@ -119,8 +125,8 @@ void	launch_execve(t_com *com, t_zid *zone, char **env_set, int i);
 void	acces(char *com, char **all_com, char **env_set);
 int		search_path(t_val *env);
 int		my_access(char *path, int mode);
-void	install_arg(t_com *com, int num_args);
-int		set_arg_size(t_com *com);
+void	install_arg(t_com *com, int num_args, int n);
+int		set_arg_size(t_com *com, int n);
 char	*redirection_split(char *input);
 char	*fill_the_red(int len, int i, int j, char *input);
 char	*ft_strncpy(char *dest, char *src, unsigned int n);
@@ -136,4 +142,8 @@ char	**ft_splito(char *str);
 void	free_zone(t_zid *zone);
 t_slp_p	*init_slp_p(void);
 void	fill_it(t_slp_p	*val, char *word, char *input, char **words);
+void	herdoc(t_com *com);
+int		is_empty(const char *line);
+int		find_pwd(t_val *env);
+int		find_com(char **str);
 #endif
